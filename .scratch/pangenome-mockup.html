@@ -1,0 +1,732 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>BRC Analytics — Pangenome: Plasmodium vivax v1 (mockup)</title>
+    <style>
+      :root {
+        --bg: #f5f7fa;
+        --panel: #ffffff;
+        --border: #e3e7ed;
+        --border-strong: #c9d1da;
+        --text: #15202b;
+        --text-dim: #5f6b78;
+        --text-faint: #8b96a3;
+        --accent: #1f6feb;
+        --accent-soft: #e6f0ff;
+        --good: #1a7f4c;
+        --good-soft: #e1f4ea;
+        --warn-soft: #fff5cc;
+        --warn: #956f00;
+        --bad: #b4231c;
+        --bad-soft: #fde7e5;
+        --code: #0f1620;
+        --mono: ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
+      }
+      * {
+        box-sizing: border-box;
+      }
+      body {
+        margin: 0;
+        background: var(--bg);
+        color: var(--text);
+        font: 14px/1.5 -apple-system, BlinkMacSystemFont, "Segoe UI",
+          system-ui, sans-serif;
+      }
+      a {
+        color: var(--accent);
+        text-decoration: none;
+      }
+      a:hover {
+        text-decoration: underline;
+      }
+      header.topbar {
+        background: #15202b;
+        color: #fff;
+        padding: 10px 24px;
+        display: flex;
+        align-items: center;
+        gap: 24px;
+      }
+      header.topbar .logo {
+        font-weight: 700;
+        letter-spacing: 0.3px;
+      }
+      header.topbar nav {
+        display: flex;
+        gap: 18px;
+        font-size: 13px;
+      }
+      header.topbar nav a {
+        color: #c7d2dd;
+      }
+      header.topbar nav a.active {
+        color: #fff;
+        border-bottom: 2px solid var(--accent);
+        padding-bottom: 2px;
+      }
+      .breadcrumbs {
+        padding: 10px 24px;
+        font-size: 12px;
+        color: var(--text-dim);
+        background: var(--bg);
+        border-bottom: 1px solid var(--border);
+      }
+      main {
+        padding: 24px;
+        max-width: 1280px;
+        margin: 0 auto;
+      }
+      .hero {
+        display: grid;
+        grid-template-columns: 1fr auto;
+        gap: 24px;
+        background: var(--panel);
+        border: 1px solid var(--border);
+        border-radius: 8px;
+        padding: 20px 24px;
+        margin-bottom: 16px;
+      }
+      .hero h1 {
+        margin: 0 0 4px;
+        font-size: 22px;
+      }
+      .hero h1 em {
+        font-style: italic;
+      }
+      .hero .subtitle {
+        color: var(--text-dim);
+        font-size: 13px;
+      }
+      .hero-meta {
+        display: flex;
+        gap: 28px;
+        margin-top: 16px;
+        font-size: 13px;
+      }
+      .hero-meta dt {
+        color: var(--text-faint);
+        text-transform: uppercase;
+        font-size: 11px;
+        letter-spacing: 0.4px;
+      }
+      .hero-meta dd {
+        margin: 2px 0 0;
+        font-weight: 600;
+      }
+      .pill {
+        display: inline-block;
+        padding: 2px 8px;
+        border-radius: 999px;
+        font-size: 11px;
+        font-weight: 600;
+        background: var(--accent-soft);
+        color: var(--accent);
+      }
+      .pill.good {
+        background: var(--good-soft);
+        color: var(--good);
+      }
+      .pill.warn {
+        background: var(--warn-soft);
+        color: var(--warn);
+      }
+      .pill.muted {
+        background: #eef1f5;
+        color: var(--text-dim);
+      }
+      .actions {
+        display: flex;
+        gap: 8px;
+        flex-direction: column;
+      }
+      .btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        background: var(--accent);
+        color: #fff;
+        padding: 8px 14px;
+        border-radius: 6px;
+        font-size: 13px;
+        font-weight: 600;
+        cursor: pointer;
+        border: none;
+      }
+      .btn.outline {
+        background: transparent;
+        color: var(--accent);
+        border: 1px solid var(--accent);
+      }
+      .btn.ghost {
+        background: transparent;
+        color: var(--text-dim);
+        border: 1px solid var(--border-strong);
+      }
+      .tabs {
+        display: flex;
+        gap: 2px;
+        border-bottom: 1px solid var(--border);
+        background: var(--panel);
+        border: 1px solid var(--border);
+        border-radius: 8px 8px 0 0;
+        border-bottom: none;
+        padding: 0 12px;
+        margin-top: 8px;
+      }
+      .tabs button {
+        padding: 12px 16px;
+        background: transparent;
+        border: none;
+        font-size: 13px;
+        color: var(--text-dim);
+        cursor: pointer;
+        border-bottom: 2px solid transparent;
+        font-weight: 500;
+      }
+      .tabs button.active {
+        color: var(--text);
+        border-bottom-color: var(--accent);
+        font-weight: 600;
+      }
+      .panel {
+        background: var(--panel);
+        border: 1px solid var(--border);
+        border-radius: 0 0 8px 8px;
+        padding: 20px 24px;
+      }
+      .panel + .panel {
+        margin-top: 16px;
+        border-radius: 8px;
+      }
+      .panel h2 {
+        margin: 0 0 4px;
+        font-size: 15px;
+      }
+      .panel .panel-sub {
+        color: var(--text-dim);
+        font-size: 12px;
+        margin-bottom: 16px;
+      }
+      .grid-2 {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 16px;
+      }
+      .browser {
+        background: #f7f9fc;
+        border: 1px dashed var(--border-strong);
+        border-radius: 6px;
+        padding: 16px;
+        font-family: var(--mono);
+        font-size: 12px;
+        color: var(--text-dim);
+        overflow-x: auto;
+        white-space: pre;
+        line-height: 1.55;
+      }
+      .browser .label {
+        color: var(--text);
+        display: inline-block;
+        min-width: 17ch;
+      }
+      .browser .gene {
+        color: var(--accent);
+        font-weight: 600;
+      }
+      .browser .signal-strong {
+        color: var(--bad);
+        font-weight: 600;
+      }
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 13px;
+      }
+      th,
+      td {
+        text-align: left;
+        padding: 9px 10px;
+        border-bottom: 1px solid var(--border);
+      }
+      th {
+        font-size: 11px;
+        text-transform: uppercase;
+        color: var(--text-faint);
+        font-weight: 600;
+        letter-spacing: 0.4px;
+        background: #f7f9fc;
+      }
+      tr:hover td {
+        background: #f7f9fc;
+      }
+      td.mono {
+        font-family: var(--mono);
+        font-size: 12px;
+      }
+      td.num {
+        text-align: right;
+        font-variant-numeric: tabular-nums;
+      }
+      .chip {
+        display: inline-block;
+        background: #eef1f5;
+        color: var(--text-dim);
+        padding: 2px 7px;
+        border-radius: 4px;
+        font-size: 11px;
+        margin-right: 4px;
+      }
+      .chip.signal {
+        background: var(--accent-soft);
+        color: var(--accent);
+      }
+      .chip.selection {
+        background: #f1e8ff;
+        color: #6a3ec2;
+      }
+      .legend {
+        display: flex;
+        gap: 14px;
+        font-size: 12px;
+        color: var(--text-dim);
+        margin-bottom: 10px;
+      }
+      .legend span::before {
+        content: "■ ";
+      }
+      .legend .ihs::before {
+        color: #1f6feb;
+      }
+      .legend .pi::before {
+        color: #1a7f4c;
+      }
+      .legend .fst::before {
+        color: #b4231c;
+      }
+      .legend .af::before {
+        color: #6a3ec2;
+      }
+      .note {
+        background: var(--warn-soft);
+        border-left: 3px solid var(--warn);
+        padding: 10px 12px;
+        font-size: 12px;
+        color: #6a4f00;
+        border-radius: 4px;
+        margin-top: 12px;
+      }
+      .kv {
+        display: grid;
+        grid-template-columns: 220px 1fr;
+        gap: 4px 16px;
+        font-size: 13px;
+      }
+      .kv dt {
+        color: var(--text-dim);
+      }
+      .kv dd {
+        margin: 0;
+      }
+      .scroll {
+        max-height: 360px;
+        overflow-y: auto;
+      }
+      .footnote {
+        font-size: 11px;
+        color: var(--text-faint);
+        margin-top: 14px;
+      }
+      .stat-row {
+        display: flex;
+        gap: 24px;
+        margin-top: 8px;
+        margin-bottom: 8px;
+      }
+      .stat {
+        background: #f7f9fc;
+        border: 1px solid var(--border);
+        border-radius: 6px;
+        padding: 10px 14px;
+        flex: 1;
+      }
+      .stat .label {
+        color: var(--text-faint);
+        font-size: 11px;
+        text-transform: uppercase;
+        letter-spacing: 0.4px;
+      }
+      .stat .value {
+        font-size: 18px;
+        font-weight: 600;
+        margin-top: 2px;
+      }
+      .stat .delta {
+        font-size: 11px;
+        color: var(--text-dim);
+      }
+      details {
+        margin-top: 12px;
+      }
+      summary {
+        cursor: pointer;
+        color: var(--accent);
+        font-size: 13px;
+      }
+    </style>
+  </head>
+  <body>
+    <header class="topbar">
+      <div class="logo">BRC Analytics</div>
+      <nav>
+        <a href="#">Data</a>
+        <a href="#">Analyze</a>
+        <a href="#" class="active">Pangenomes</a>
+        <a href="#">Priority Pathogens</a>
+        <a href="#">Workflows</a>
+        <a href="#">Learn</a>
+      </nav>
+    </header>
+
+    <div class="breadcrumbs">
+      Data &nbsp;›&nbsp; Pangenomes &nbsp;›&nbsp; <em>Plasmodium vivax</em> &nbsp;›&nbsp;
+      <strong>plasmodium-vivax-v1</strong>
+    </div>
+
+    <main>
+      <section class="hero">
+        <div>
+          <h1><em>Plasmodium vivax</em> pangenome <span class="pill">v1 · 2026-01</span></h1>
+          <div class="subtitle">
+            9-genome species pangenome anchored on PvP01. Population-genomic signal tracks derived from MalariaGEN
+            Pv4 (1,895 samples) and per-ortholog HyPhy/Datamonkey selection analyses across the vivax-clade.
+          </div>
+
+          <dl class="hero-meta">
+            <div><dt>Anchor reference</dt><dd>PvP01 · GCA_900093555.2</dd></div>
+            <div><dt>Member assemblies</dt><dd>9</dd></div>
+            <div><dt>Single-copy orthologs</dt><dd>4,812</dd></div>
+            <div><dt>Source cohort</dt><dd>MalariaGEN Pv4 (n=1,895)</dd></div>
+            <div><dt>License</dt><dd>CC-BY 4.0</dd></div>
+          </dl>
+
+          <div class="stat-row">
+            <div class="stat">
+              <div class="label">Population-signal tracks</div>
+              <div class="value">54</div>
+              <div class="delta">6 signals × 9 references</div>
+            </div>
+            <div class="stat">
+              <div class="label">Selection-positive genes</div>
+              <div class="value">312</div>
+              <div class="delta">BUSTED q&lt;0.05 · MK α&gt;0.3</div>
+            </div>
+            <div class="stat">
+              <div class="label">Liftover chains</div>
+              <div class="value">72</div>
+              <div class="delta">all pairwise (9×8)</div>
+            </div>
+            <div class="stat">
+              <div class="label">Graph size</div>
+              <div class="value">28.4 Mb</div>
+              <div class="delta">GFA · pggb</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="actions">
+          <button class="btn">⤓ Download bundle</button>
+          <button class="btn outline">↗ Open in UCSC Browser</button>
+          <button class="btn ghost">▶ Re-run in Galaxy</button>
+        </div>
+      </section>
+
+      <nav class="tabs">
+        <button class="active">Graph</button>
+        <button>References</button>
+        <button>Signal tracks</button>
+        <button>Selection</button>
+        <button>Orthologs &amp; alignments</button>
+        <button>Provenance</button>
+      </nav>
+
+      <section class="panel">
+        <h2>Genome browser preview — <em>PvP01</em>, chr 10 around <span class="chip selection">pvdbp</span></h2>
+        <p class="panel-sub">
+          Default view: population-genomic signals from Pv4 + per-gene selection summary. Switch reference via the
+          “References” tab to see the same window projected via the corresponding liftover chain.
+        </p>
+
+        <div class="legend">
+          <span class="ihs">iHS (Pv4, monoclonal F<sub>WS</sub>&gt;0.95, n=1,210)</span>
+          <span class="pi">π (10 kb window)</span>
+          <span class="fst">F<sub>ST</sub> SE-Asia vs S-America</span>
+          <span class="af">Allele freq · K76I locus by region</span>
+        </div>
+
+<pre class="browser"><span class="label">PvP01 chr10</span> 470,000 ─────────── 480,000 ────────── <span class="gene">pvdbp ━━━■■■■■■■■■━━</span> ─────── 510,000
+<span class="label">genes        </span>   ──■──        ──■■──       ━━━━━<span class="gene">PVP01_1014700</span>━━━━━     ──■──
+<span class="label">iHS          </span>   _.-^"-._    ___...---""""""""<span class="signal-strong">▲▲▲▲▲</span>""""""---...___       _._
+<span class="label">π (10 kb)    </span>   ─~─~─~─~─~─~─~─~─~─~─~──~──┐  ┌─~─~─~─~─~─~─~─~─~─
+                                                ╰──╯  (drop = recent sweep)
+<span class="label">Tajima's D   </span>   ─~─~─~─~─~─~─~─~─~─~─~─~─~─▼▼▼▼▼─~─~─~─~─~─~─~─~─~
+<span class="label">F_ST  SEA/SAM</span>   ░░░░░░░░░░░░░░░░░░░░░░<span class="signal-strong">▓▓▓▓▓▓▓▓▓▓▓</span>░░░░░░░░░░░░░░░
+<span class="label">AF · Cambodia</span>   ░░░░░░░░░░░░░░░░░░░░░░<span class="signal-strong">▓▓▓▓▓▓▓▓</span>░░░░░░░░░░░░░░░░░░  (0.91)
+<span class="label">AF · Ethiopia</span>   ░░░░░░░░░░░░░░░░░░░░░░░░▒▒▒▒░░░░░░░░░░░░░░░░░░░  (0.18)
+<span class="label">AF · Brazil  </span>   ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░  (0.02)
+
+<span class="label">selection.bb </span>   ─────────── <span class="gene">[pvdbp]</span> BUSTED q=2e-7 · aBSREL+ on Pv branch · MEME sites: 15
+<span class="label">MK α         </span>   ─────────── α=0.62 (CI 0.51–0.71)  ← adaptive substitution fraction
+<span class="label">AlphaFold    </span>   ─────────── pLDDT mean 87.1; pocket residues in MEME-sig set
+</pre>
+
+        <div class="note">
+          Subtelomeric and <em>pir</em> / VSA regions are masked out of the signal tracks by default
+          (low mappability in Pv4 short-read data). Toggle “show masked regions” in JBrowse to override.
+        </div>
+      </section>
+
+      <section class="panel">
+        <h2>Selection summary — top hits</h2>
+        <p class="panel-sub">
+          4,812 single-copy orthologs · BUSTED[S] + RELAX + aBSREL + Contrast-FEL + McDonald-Kreitman α. Partition
+          for RELAX/Contrast-FEL: <strong>human-infecting</strong> (<em>P. vivax, P. simium, P. vivax-like</em>) vs.
+          <strong>simian-infecting</strong> (<em>P. cynomolgi, P. inui, P. fragile, P. coatneyi, P. knowlesi</em>).
+        </p>
+
+        <table>
+          <thead>
+            <tr>
+              <th>Gene (PvP01)</th>
+              <th>Name / family</th>
+              <th class="num">BUSTED q</th>
+              <th class="num">RELAX K</th>
+              <th>aBSREL+ branches</th>
+              <th class="num">MEME sites</th>
+              <th class="num">MK α</th>
+              <th>Tags</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="mono">PVP01_1014700</td>
+              <td><em>pvdbp</em> — Duffy-binding protein</td>
+              <td class="num">2.0e-7</td>
+              <td class="num">2.41 (intensified, human-inf)</td>
+              <td>Pv, Pv-like</td>
+              <td class="num">15</td>
+              <td class="num">0.62</td>
+              <td><span class="chip selection">antigen</span><span class="chip selection">host-range</span></td>
+            </tr>
+            <tr>
+              <td class="mono">PVP01_0936000</td>
+              <td><em>msp1</em></td>
+              <td class="num">1.4e-6</td>
+              <td class="num">1.78</td>
+              <td>Pv, P. simium</td>
+              <td class="num">22</td>
+              <td class="num">0.55</td>
+              <td><span class="chip selection">antigen</span><span class="chip selection">vaccine target</span></td>
+            </tr>
+            <tr>
+              <td class="mono">PVP01_0913500</td>
+              <td><em>ama1</em></td>
+              <td class="num">3.0e-5</td>
+              <td class="num">1.62</td>
+              <td>Pv</td>
+              <td class="num">11</td>
+              <td class="num">0.48</td>
+              <td><span class="chip selection">antigen</span></td>
+            </tr>
+            <tr>
+              <td class="mono">PVP01_0801600</td>
+              <td><em>rbp2b</em> — reticulocyte binding 2b</td>
+              <td class="num">8.1e-5</td>
+              <td class="num">2.05</td>
+              <td>Pv, P. simium, P. cynomolgi</td>
+              <td class="num">9</td>
+              <td class="num">0.41</td>
+              <td><span class="chip selection">invasion</span></td>
+            </tr>
+            <tr>
+              <td class="mono">PVP01_1213600</td>
+              <td><em>mdr1</em></td>
+              <td class="num">2.7e-4</td>
+              <td class="num">1.34</td>
+              <td>Pv</td>
+              <td class="num">4</td>
+              <td class="num">0.38</td>
+              <td><span class="chip selection">drug resistance</span></td>
+            </tr>
+            <tr>
+              <td class="mono">PVP01_0526600</td>
+              <td>conserved hypothetical</td>
+              <td class="num">5.9e-4</td>
+              <td class="num">0.21 (relaxed, simian)</td>
+              <td>P. inui, P. fragile</td>
+              <td class="num">6</td>
+              <td class="num">0.29</td>
+              <td><span class="chip">novel</span></td>
+            </tr>
+          </tbody>
+        </table>
+
+        <details>
+          <summary>Show 306 more selection-positive genes …</summary>
+        </details>
+      </section>
+
+      <section class="panel">
+        <h2>Member references</h2>
+        <p class="panel-sub">
+          Click a reference to see this same view projected through the corresponding pairwise chain file.
+        </p>
+
+        <table>
+          <thead>
+            <tr>
+              <th>Assembly</th>
+              <th>Accession</th>
+              <th>Species</th>
+              <th>Host range</th>
+              <th>Chain ← PvP01</th>
+              <th>Signal tracks</th>
+              <th>Selection</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>PvP01</strong> (anchor)</td>
+              <td class="mono">GCA_900093555.2</td>
+              <td><em>P. vivax</em></td>
+              <td>human</td>
+              <td>—</td>
+              <td><span class="chip signal">iHS</span><span class="chip signal">π</span><span class="chip signal">D</span><span class="chip signal">F<sub>ST</sub></span><span class="chip signal">AF</span></td>
+              <td><span class="chip selection">312 sig.</span></td>
+            </tr>
+            <tr>
+              <td>Sal-1</td>
+              <td class="mono">GCA_000002415.2</td>
+              <td><em>P. vivax</em></td>
+              <td>human</td>
+              <td>⤓ chain.gz</td>
+              <td><span class="chip signal">iHS</span><span class="chip signal">π</span><span class="chip signal">D</span><span class="chip signal">F<sub>ST</sub></span><span class="chip signal">AF</span></td>
+              <td><span class="chip selection">312 sig.</span></td>
+            </tr>
+            <tr>
+              <td>P. simium</td>
+              <td class="mono">GCA_902459845.2</td>
+              <td><em>P. simium</em></td>
+              <td>human · monkey</td>
+              <td>⤓ chain.gz</td>
+              <td><span class="chip muted">via Pv4 (lift)</span></td>
+              <td><span class="chip selection">312 sig.</span></td>
+            </tr>
+            <tr>
+              <td>P. cynomolgi B</td>
+              <td class="mono">GCA_000321355.1</td>
+              <td><em>P. cynomolgi</em></td>
+              <td>monkey</td>
+              <td>⤓ chain.gz</td>
+              <td><span class="chip muted">—</span></td>
+              <td><span class="chip selection">312 sig.</span></td>
+            </tr>
+            <tr>
+              <td>P. knowlesi H</td>
+              <td class="mono">GCA_000006355.3</td>
+              <td><em>P. knowlesi</em></td>
+              <td>human · monkey</td>
+              <td>⤓ chain.gz</td>
+              <td><span class="chip muted">—</span></td>
+              <td><span class="chip selection">312 sig.</span></td>
+            </tr>
+            <tr>
+              <td>P. inui San Antonio 1</td>
+              <td class="mono">GCA_000524495.1</td>
+              <td><em>P. inui</em></td>
+              <td>monkey</td>
+              <td>⤓ chain.gz</td>
+              <td><span class="chip muted">—</span></td>
+              <td><span class="chip selection">312 sig.</span></td>
+            </tr>
+            <tr>
+              <td>P. fragile</td>
+              <td class="mono">GCA_000956335.1</td>
+              <td><em>P. fragile</em></td>
+              <td>monkey</td>
+              <td>⤓ chain.gz</td>
+              <td><span class="chip muted">—</span></td>
+              <td><span class="chip selection">312 sig.</span></td>
+            </tr>
+            <tr>
+              <td>P. coatneyi Hackeri</td>
+              <td class="mono">GCA_900005855.1</td>
+              <td><em>P. coatneyi</em></td>
+              <td>monkey</td>
+              <td>⤓ chain.gz</td>
+              <td><span class="chip muted">—</span></td>
+              <td><span class="chip selection">312 sig.</span></td>
+            </tr>
+            <tr>
+              <td>P. vivax-like</td>
+              <td class="mono">GCA_902460545.1</td>
+              <td><em>P. vivax-like</em></td>
+              <td>ape · human (rare)</td>
+              <td>⤓ chain.gz</td>
+              <td><span class="chip muted">via Pv4 (lift)</span></td>
+              <td><span class="chip selection">312 sig.</span></td>
+            </tr>
+          </tbody>
+        </table>
+      </section>
+
+      <section class="grid-2">
+        <section class="panel">
+          <h2>Provenance</h2>
+          <p class="panel-sub">Reproducibility metadata for this pangenome build.</p>
+          <dl class="kv">
+            <dt>Build pipeline</dt><dd><a href="#">brc-pangenome-build · v0.3.1</a></dd>
+            <dt>Graph construction</dt><dd>pggb · 13-haplotype mode</dd>
+            <dt>Population data</dt><dd>MalariaGEN Pv4 VCF · 1,895 samples · 26 countries</dd>
+            <dt>Sample filter</dt><dd>F<sub>WS</sub> &gt; 0.95 (monoclonal) → n=1,210</dd>
+            <dt>Selection workflow</dt><dd><a href="#">iwc/hyphy-selection-screen · v1.0</a></dd>
+            <dt>Codon aligner</dt><dd>MACSE2 v2.06</dd>
+            <dt>Core-genome mask</dt><dd>MalariaGEN PvP01 core (~26.1 / 28.4 Mb)</dd>
+            <dt>Generated</dt><dd>2026-01-14 · workflow run <span class="mono">galaxy:b7f3…</span></dd>
+            <dt>Storage</dt><dd>datacache.galaxyproject.org/brc/data/pangenomes/plasmodium-vivax-v1/</dd>
+          </dl>
+        </section>
+
+        <section class="panel">
+          <h2>Re-use this resource</h2>
+          <p class="panel-sub">All artifacts are public, versioned, and downloadable.</p>
+          <table>
+            <thead><tr><th>Artifact</th><th>Format</th><th>Size</th><th></th></tr></thead>
+            <tbody>
+              <tr><td>Pangenome graph</td><td class="mono">GFA1.gz</td><td class="num">214 MB</td><td><a href="#">⤓</a></td></tr>
+              <tr><td>Pairwise chains</td><td class="mono">.chain.gz (72×)</td><td class="num">38 MB</td><td><a href="#">⤓</a></td></tr>
+              <tr><td>Projected VCFs</td><td class="mono">VCF.gz + tbi</td><td class="num">4.1 GB</td><td><a href="#">⤓</a></td></tr>
+              <tr><td>Population-signal BigWigs</td><td class="mono">.bw / .bb</td><td class="num">680 MB</td><td><a href="#">⤓</a></td></tr>
+              <tr><td>Single-copy ortholog table</td><td class="mono">TSV.gz</td><td class="num">3.7 MB</td><td><a href="#">⤓</a></td></tr>
+              <tr><td>Per-ortholog CDS alignments</td><td class="mono">FASTA.gz (4,812)</td><td class="num">96 MB</td><td><a href="#">⤓</a></td></tr>
+              <tr><td>HyPhy JSON outputs</td><td class="mono">.json.gz</td><td class="num">312 MB</td><td><a href="#">⤓</a></td></tr>
+              <tr><td>Selection summary</td><td class="mono">.bb + .tsv.gz</td><td class="num">11 MB</td><td><a href="#">⤓</a></td></tr>
+            </tbody>
+          </table>
+          <p class="footnote">
+            Cite: MalariaGEN Pv4 (Wellcome Open Res, 2024) · pggb · HyPhy v2.5 (Datamonkey) · BRC Analytics
+            pangenome resource <span class="mono">plasmodium-vivax-v1</span>.
+          </p>
+        </section>
+      </section>
+
+      <p class="footnote" style="margin-top:24px;">
+        Mockup only. Real implementation hosts BigWig/BigBed/GFA on
+        <span class="mono">datacache.galaxyproject.org</span>, metadata in <span class="mono">catalog/source/pangenomes.yml</span>,
+        rendered by a new <span class="mono">PangenomeView</span> + an additional section in
+        <span class="mono">EntityView/assembly</span>.
+      </p>
+    </main>
+  </body>
+</html>
